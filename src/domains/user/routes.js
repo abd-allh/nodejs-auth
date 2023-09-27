@@ -44,7 +44,8 @@ router.post("/login", async (req, res) => {
 //! Register
 router.post("/register", async (req, res) => {
   try {
-    let { firstname, email, password, lastname, age, mobile } = req.body
+    let { firstname, email, password, lastname, age, mobile, howfoundus_id } =
+      req.body
 
     firstname = firstname.trim()
     email = email.trim()
@@ -68,6 +69,7 @@ router.post("/register", async (req, res) => {
         lastname,
         age,
         mobile,
+        howfoundus_id,
       })
       // TODO: - If successful registration, generate an OTP and send it to the provided mobile number.
       await sendVerificationOTPEmail(email)
