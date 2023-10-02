@@ -1,11 +1,15 @@
 const express = require("express")
 const router = express.Router()
-const { createNewUser, authenticateUser } = require("./controller")
+const {
+  createNewUser,
+  authenticateUser,
+} = require("../../controllers/userController")
 const verifyToken = require("../../Middleware/auth")
 const auth = require("./../../Middleware/auth")
 const {
   sendVerificationOTPEmail,
-} = require("./../email_verification/controller")
+} = require("../../controllers/eMailController")
+const LoginAttempt = require("../../models/loginAttemptModel")
 
 // TODO: - Create an API endpoint for user login, where users provide their `user_id` and OTP
 //! Login
@@ -18,6 +22,12 @@ router.post("/login", async (req, res) => {
 
     if (!(email && password)) {
       throw Error("Empty credentials supplied!")
+    }
+
+    const loginAttempt = await LoginAttempt.findOne({ where: { email } })
+
+    if (loginAttempt && loginAttempt.blockedUntil > new Date()) {
+      throw Error("Account is blocked. Please try again later.")
     }
     // TODO: - If the user is verified (`verified_boolean` is true) and the OTP is correct, respond with JWT token and name.
     const authenticatedUser = await authenticateUser({ email, password })

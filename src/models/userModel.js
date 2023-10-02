@@ -2,7 +2,7 @@
 // TODO:   howfoundus_id, verified_boolean, mobile, password
 
 const { DataTypes } = require("sequelize")
-const sequelize = require("./../../config/db")
+const sequelize = require("../config/db")
 
 const User = sequelize.define("User", {
   id: {

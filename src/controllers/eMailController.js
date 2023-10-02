@@ -1,5 +1,5 @@
-const User = require("./../user/model")
-const { sendOTP, verifyOTP, deleteOTP } = require("./../otp/controller")
+const User = require("../models/userModel")
+const { sendOTP, verifyOTP, deleteOTP } = require("./otpController")
 
 const verifyUserEmail = async ({ email, otp }) => {
   try {

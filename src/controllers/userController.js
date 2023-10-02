@@ -1,6 +1,7 @@
-const User = require("./model")
-const { hashData, verifyHashedData } = require("./../../util/hashData")
-const createToken = require("./../../util/createToken")
+const User = require("../models/userModel")
+const { hashData, verifyHashedData } = require("../util/hashData")
+const createToken = require("../util/createToken")
+const LoginAttempt = require("../models/loginAttemptModel")
 
 const authenticateUser = async (data) => {
   try {
@@ -18,19 +19,27 @@ const authenticateUser = async (data) => {
     }
 
     const hashedPassword = fetchedUser.password
+
     const passwordMatch = await verifyHashedData(password, hashedPassword)
 
     if (!passwordMatch) {
+      // Increment the login attempts for the user
+      await LoginAttempt.incrementAttempts(email)
+
       throw Error("Invalid password entered!")
     }
 
-    //* create user token
+    // Reset the login attempts for the user
+    await LoginAttempt.resetAttempts(email)
+
+    // Create user token
     const tokenData = { userId: fetchedUser._id, email }
     const token = await createToken(tokenData)
 
-    //* assign user token
+    // Assign user token
     fetchedUser.token = token
     await fetchedUser.save()
+
     return fetchedUser
   } catch (error) {
     throw error

@@ -1,6 +1,9 @@
 const express = require("express")
 const router = express.Router()
-const { sendPasswordResetOTPEmail, resetUserPassword } = require("./controller")
+const {
+  sendPasswordResetOTPEmail,
+  resetUserPassword,
+} = require("./../../controllers/fPassController")
 
 //! Reset user password
 router.post("/reset", async (req, res) => {

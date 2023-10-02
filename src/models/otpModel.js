@@ -1,7 +1,7 @@
 // TODO: otp table: id, user_id, OTP, status, createdAt
 
 const { DataTypes } = require("sequelize")
-const sequelize = require("./../../config/db")
+const sequelize = require("../config/db")
 
 const OTP = sequelize.define("OTP", {
   id: {
